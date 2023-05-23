@@ -1,0 +1,67 @@
+:root {
+    --one-color: #27374D;
+    --two-color: #526D82;
+    --three-color: #9DB2BF;
+    --four-color: #DDE6ED;
+    --accent-color:#D21312;
+  }
+
+*{
+    box-sizing: border-box;
+    color: var(--four-color)
+}
+
+body{
+    background-color:  var(--one-color);  ;
+    padding: 1rem;
+    display: grid;
+    grid-template-areas: 
+    "headerBox headerBox headerBox headerBox headerBox"
+    "sideBox mainBox mainBox mainBox mainBox";
+}
+
+#logo{
+    width: 4rem; 
+}
+
+#login{
+    width: 4rem;
+}
+
+.svg{
+    filter: invert(16%) sepia(81%) saturate(3883%) hue-rotate(354deg) brightness(92%) contrast(96%);
+}
+
+.headerBox {
+    grid-area: headerBox;
+    align-items: center; 
+    background-color: var(--two-color);
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+}
+
+
+.sideBox {
+    grid-area: sideBox;
+    background-color: var(--two-color);
+    border-radius: 1rem;
+    padding: 1rem;
+    
+}
+  
+.mainBox {
+    grid-area: mainBox;
+    background-color: var(--two-color);
+    margin-left: 1rem;
+    padding: 1rem;
+    border-radius: 1rem;
+}
+
+.headerBox{
+    display: flex;
+}
+
+.headerBox object:last-child{
+    margin-left: auto;
+}
+
