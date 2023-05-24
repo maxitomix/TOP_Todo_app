@@ -1,6 +1,41 @@
 import './style.css';
 
 
+let projectList = [
+    {
+      name: 'Project1',
+      todos: [
+        { text: 'Lorem ipsum dolor sit amet.', recordDate: '2023-05-20', dueDate: '2023-05-26' },
+        { text: 'Ut enim ad minim veniam.', recordDate: '2023-05-20', dueDate: '2023-05-27' },
+        { text: '19 packages are looking for funding.', recordDate: '2023-05-20', dueDate: '2023-05-28' }
+      ],
+      doing: [
+        { text: 'Lorem ipsum dolor sit amet.', recordDate: '2023-05-20', dueDate: '2023-05-26' },
+        { text: 'Ut enim ad minim veniam.', recordDate: '2023-05-20', dueDate: '2023-05-27' },
+      ],
+      done: [
+        { text: 'Lorem ipsum dolor sit amet.', recordDate: '2023-05-20', dueDate: '2023-05-26' },
+        { text: 'Ut enim ad minim veniam.', recordDate: '2023-05-20', dueDate: '2023-05-27' },
+      ],
+    },
+    {
+      name: 'Project2',
+      todos: [
+        { text: 'Ut enim ad minim veniam.', recordDate: '2023-05-20', dueDate: '2023-05-29' },
+        { text: 'Ut enim ad minim veniam.', recordDate: '2023-05-20', dueDate: '2023-05-30' }
+      ]
+    },
+    {
+      name: 'Project3',
+      todos: [
+        { text: '19 packages are looking for funding.', recordDate: '2023-05-20', dueDate: '2023-06-01' }
+      ]
+    }
+];
+
+let projectSelected 
+
+
 function header(){
     const contentDiv = document.getElementById('content');
   
@@ -35,10 +70,38 @@ function sidebar(){
     contentDiv.appendChild(sidebarDiv);
 
     const sideBarH2 = document.createElement('h2');
-    sideBarH2.textContent = 'ToDoneIng';
+    sideBarH2.textContent = 'Your Projects: ';
     sidebarDiv.appendChild(sideBarH2);
 
-    
+    // Create an unordered list for project names
+  const projectListUl = document.createElement('ul');
+  sidebarDiv.appendChild(projectListUl);
+
+  // Iterate over the projectList and add project names as list items
+    projectList.forEach((project, index) => {
+        const projectLi = document.createElement('li');
+        projectLi.textContent = project.name;
+        // Add data attribute for the project name position
+        projectLi.dataset.position = index;
+
+        //add a click listener to stored the selected project
+        projectLi.addEventListener('click', () => {
+            projectSelected = projectLi.dataset.position;
+
+            //store selected and also highlight it
+            const sidebarListAll = projectListUl.getElementsByTagName('li');
+            Array.from(sidebarListAll).forEach(item => {
+                item.classList.remove('selected')
+            })
+            projectLi.classList.add('selected');
+            console.log('Project selected:', projectSelected);
+            
+        })
+
+
+        projectListUl.appendChild(projectLi);
+    });
+
 }
 
 function main(){
@@ -53,7 +116,10 @@ function main(){
     mainDiv.appendChild(mainH2);
 }
 
+function display(){
+    header();
+    sidebar();
+    main();
+}
 
-header();
-sidebar();
-main();
+display()

@@ -44,24 +44,6 @@ html{
     margin-bottom: 1rem;
 }
 
-
-.sideBox {
-    grid-area: sideBox;
-    background-color: var(--two-color);
-    border-radius: 1rem;
-    padding: 1rem;
-
-    
-}
-  
-.mainBox {
-    grid-area: mainBox;
-    background-color: var(--two-color);
-    margin-left: 1rem;
-    padding: 1rem;
-    border-radius: 1rem;
-}
-
 .headerBox{
     display: flex;
 }
@@ -72,5 +54,45 @@ html{
 
 .headerBox object:last-child{
     margin-left: auto;
+}
+
+
+.sideBox {
+    grid-area: sideBox;
+    background-color: var(--two-color);
+    border-radius: 1rem;
+    padding: 1rem;
+}
+
+.sideBox ul{
+    margin: 1rem;
+}
+
+.sideBox li{
+    padding: .5rem;
+    margin: .5rem;
+    background-color:  var(--one-color);  
+    box-shadow: 
+    2px 2px 4px rgba(0, 0, 0, 0.2),
+    -2px -2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.selected{
+    background-color:  var(--two-color) !important;
+    outline: 4px solid var(--one-color) !important;
+}
+
+.sideBox li:hover{
+    cursor:pointer;
+    background-color:  var(--two-color);
+    outline: 4px solid var(--one-color);  
+}
+
+.mainBox {
+    grid-area: mainBox;
+    background-color: var(--two-color);
+    margin-left: 1rem;
+    padding: 1rem;
+    border-radius: 1rem;
 }
 
