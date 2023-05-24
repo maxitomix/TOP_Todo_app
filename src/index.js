@@ -33,7 +33,8 @@ let projectList = [
     }
 ];
 
-let projectSelected 
+let projectSelected = 0; 
+let mainDiv = document.getElementById('content').getElementsByClassName('mainBox')[0];
 
 
 function header(){
@@ -95,7 +96,8 @@ function sidebar(){
             })
             projectLi.classList.add('selected');
             console.log('Project selected:', projectSelected);
-            
+            main()
+          
         })
 
 
@@ -105,15 +107,29 @@ function sidebar(){
 }
 
 function main(){
+    if (!mainDiv) {
     const contentDiv = document.getElementById('content');
-  
-    const mainDiv = document.createElement('div');
+    mainDiv = document.createElement('div');
     mainDiv.classList.add('mainBox');
     contentDiv.appendChild(mainDiv);
+    }
+    mainDiv.innerHTML = '';
 
     const mainH2 = document.createElement('h2');
-    mainH2.textContent = 'Project "Default" work area:';
+    mainH2.textContent = `Project ${projectList[projectSelected].name} work area:`;
     mainDiv.appendChild(mainH2);
+
+    // Display todo, doing, and done tasks of the selected project
+    const todoStatus = ['todos', 'doing', 'done'];
+    todoStatus.forEach( statuses => {
+        const statusContainer = document.createElement('div');
+        mainDiv.appendChild(statusContainer);
+        const statusTitle = document.createElement('h3');
+        statusTitle.textContent = statuses;
+        statusContainer.appendChild(statusTitle);
+
+    })
+
 }
 
 function display(){
@@ -123,3 +139,4 @@ function display(){
 }
 
 display()
+console.log(projectList)
