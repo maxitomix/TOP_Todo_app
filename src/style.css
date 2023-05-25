@@ -64,19 +64,7 @@ html{
     background-color: var(--two-color);
     border-radius: 1rem;
     padding: 1rem;
-}
 
-.sideBox ul{
-    margin: 1rem;
-}
-
-.sideBox li{
-    padding: .5rem;
-    margin: .5rem;
-    background-color:  var(--one-color);  
-    box-shadow: 
-    2px 2px 4px rgba(0, 0, 0, 0.2),
-    -2px -2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .selected{
@@ -84,11 +72,45 @@ html{
     outline: 4px solid var(--one-color) !important;
 }
 
-.sideBox li:hover{
+ .projectItem {
+    padding: .5rem;
+    margin: .5rem;
+    background-color:  var(--one-color);  
+    box-shadow: 
+    2px 2px 4px rgba(0, 0, 0, 0.2),
+    -2px -2px 4px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.deleteButtonSvg {
+    width: 1.2rem;
+    z-index: -2;
+}
+
+
+
+/* .projectList div:hover{
     cursor:pointer;
     background-color:  var(--two-color);
     outline: 4px solid var(--one-color);  
-}
+} */
+
+/* .deleteButtonDiv {
+    width: 1rem;
+    margin-left: auto;
+} */
+
+/* .deleteButtonSVG:hover{
+    cursor:pointer;
+    filter: invert(16%) sepia(81%) saturate(3883%) hue-rotate(354deg) brightness(92%) contrast(96%);
+} */
+
+
+
+
+
 
 .mainBox {
     grid-area: mainBox;
@@ -116,8 +138,6 @@ html{
     -2px -2px 4px rgba(0, 0, 0, 0.2);
     display: grid;
     grid-template-columns: 1fr 1fr;
-    
-
 }
 
 .statusItems .taskItem{
@@ -126,3 +146,4 @@ html{
     padding-top: .5rem;
     margin-bottom: .5rem;
 }
+

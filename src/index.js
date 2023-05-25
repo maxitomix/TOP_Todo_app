@@ -60,7 +60,7 @@ function header(){
     logoObj.classList.add('svg');
     logoObj.id = 'login';
     logoObj.type = 'image/svg+xml';
-    logoObj.data = '/src/login.svg';
+    logoObj.data = '/src/logo.svg';
     headerDiv.appendChild(logoObj);  
     
     const headH1 = document.createElement('h1');
@@ -87,31 +87,55 @@ function sidebar(){
     sidebarDiv.appendChild(sideBarH2);
 
     // Create an unordered list for project names
-  const projectListUl = document.createElement('ul');
+  const projectListUl = document.createElement('div');
+  projectListUl.classList.add('projectList')
   sidebarDiv.appendChild(projectListUl);
 
   // Iterate over the projectList and add project names as list items
     projectList.forEach((project, index) => {
-        const projectLi = document.createElement('li');
-        projectLi.textContent = project.name;
+        const projectItem = document.createElement('div');
+        projectItem.classList.add('projectItem')
+        projectItem.textContent = project.name;
         // Add data attribute for the project name position
-        projectLi.dataset.position = index;
+        projectItem.dataset.position = index;
 
         //add a click listener to stored the selected project
-        projectLi.addEventListener('click', () => {
-            projectSelected = projectLi.dataset.position;
+          projectItem.addEventListener('click', () => {
+              projectSelected = projectItem.dataset.position;
 
-            //store selected and also highlight it
-            const sidebarListAll = projectListUl.getElementsByTagName('li');
-            Array.from(sidebarListAll).forEach(item => {
-                item.classList.remove('selected')
-            })
-            projectLi.classList.add('selected');
-            console.log('Project selected:', projectSelected);
-            main()
-          
+              //store selected and also highlight it
+              const sidebarListAll = projectListUl.getElementsByClassName('projectItem');
+              Array.from(sidebarListAll).forEach(item => {
+                  item.classList.remove('selected')
+              })
+              projectItem.classList.add('selected');
+              console.log('Project selected:', projectSelected);
+              main()
+          })
+
+        projectListUl.appendChild(projectItem);
+
+        //add delete button for projects
+        const deleteButtonDiv = document.createElement('div');
+        deleteButtonDiv.classList.add('deleteButtonDiv')
+        projectItem.appendChild(deleteButtonDiv); 
+
+        const deleteButtonSvg = document.createElement('object');
+        deleteButtonSvg.classList.add('svg');
+        deleteButtonSvg.classList.add('deleteButtonSvg');
+        deleteButtonSvg.type = 'image/svg+xml';
+        deleteButtonSvg.data = '/src/delete.svg';
+              
+
+        //add delete click for delete button
+        deleteButtonDiv.addEventListener('click', () => {
+          console.log('Project Remove:', projectSelected);
+          removeProject(projectSelected);
+          main();
         })
-        projectListUl.appendChild(projectLi);
+        
+        deleteButtonDiv.appendChild(deleteButtonSvg); 
+          
     });
 
 }
@@ -181,3 +205,25 @@ function display(){
 
 display()
 console.log(projectList)
+
+//------------------------------------------------------------------------------------------------------------------
+//factory creat project
+function createProject(name, todos, doing, done) {
+  return {
+    name,
+    todos,
+    doing,
+    done
+  };
+}
+
+// Function to add a new project to the projectList
+function addProject(name, todos) {
+let newProject = createProject(name);
+projectList.push(newProject);
+}
+
+//function remove a project from projectlist
+function removeProject(projectListIndex) {
+    projectList.splice(projectListIndex, 1);
+}
