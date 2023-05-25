@@ -84,9 +84,28 @@ html{
     align-items: center;
 }
 
-.deleteButtonSvg {
-    width: 1.2rem;
-    z-index: -2;
+.deleteButtonDiv{
+    padding: .5rem;
+    margin: .5rem;
+    background-color: darkred;  
+    box-shadow: 
+    2px 2px 4px rgba(0, 0, 0, 0.2),
+    -2px -2px 4px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.addButtonDiv{
+    padding: .5rem;
+    margin: .5rem;
+    background-color:  green;  
+    box-shadow: 
+    2px 2px 4px rgba(0, 0, 0, 0.2),
+    -2px -2px 4px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 

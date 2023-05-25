@@ -47,6 +47,7 @@ let projectList = [
 
 let projectSelected = 0; 
 let mainDiv = document.getElementById('content').getElementsByClassName('mainBox')[0];
+let sidebarDiv = document.getElementById('content').getElementsByClassName('sideBox')[0];
 
 
 function header(){
@@ -76,67 +77,81 @@ function header(){
 }
 
 function sidebar(){
+  if (!sidebarDiv) {
     const contentDiv = document.getElementById('content');
-  
-    const sidebarDiv = document.createElement('div');
+    sidebarDiv = document.createElement('div');
     sidebarDiv.classList.add('sideBox');
     contentDiv.appendChild(sidebarDiv);
+  }
+  sidebarDiv.innerHTML = '';
 
-    const sideBarH2 = document.createElement('h2');
-    sideBarH2.textContent = 'Your Projects: ';
-    sidebarDiv.appendChild(sideBarH2);
 
-    // Create an unordered list for project names
+  const sideBarH2 = document.createElement('h2');
+  sideBarH2.textContent = 'Your Projects: ';
+  sidebarDiv.appendChild(sideBarH2);
+
+  // Create an unordered list for project names
   const projectListUl = document.createElement('div');
   projectListUl.classList.add('projectList')
   sidebarDiv.appendChild(projectListUl);
 
+
+
   // Iterate over the projectList and add project names as list items
-    projectList.forEach((project, index) => {
-        const projectItem = document.createElement('div');
-        projectItem.classList.add('projectItem')
-        projectItem.textContent = project.name;
-        // Add data attribute for the project name position
-        projectItem.dataset.position = index;
+  projectList.forEach((project, index) => {
+      const projectItem = document.createElement('div');
+      projectItem.classList.add('projectItem')
+      projectItem.textContent = project.name;
+      // Add data attribute for the project name position
+      projectItem.dataset.position = index;
 
-        //add a click listener to stored the selected project
-          projectItem.addEventListener('click', () => {
-              projectSelected = projectItem.dataset.position;
+      //add a click listener to stored the selected project
+        projectItem.addEventListener('click', () => {
+            projectSelected = projectItem.dataset.position;
 
-              //store selected and also highlight it
-              const sidebarListAll = projectListUl.getElementsByClassName('projectItem');
-              Array.from(sidebarListAll).forEach(item => {
-                  item.classList.remove('selected')
-              })
-              projectItem.classList.add('selected');
-              console.log('Project selected:', projectSelected);
-              main()
-          })
-
-        projectListUl.appendChild(projectItem);
-
-        //add delete button for projects
-        const deleteButtonDiv = document.createElement('div');
-        deleteButtonDiv.classList.add('deleteButtonDiv')
-        projectItem.appendChild(deleteButtonDiv); 
-
-        const deleteButtonSvg = document.createElement('object');
-        deleteButtonSvg.classList.add('svg');
-        deleteButtonSvg.classList.add('deleteButtonSvg');
-        deleteButtonSvg.type = 'image/svg+xml';
-        deleteButtonSvg.data = '/src/delete.svg';
-              
-
-        //add delete click for delete button
-        deleteButtonDiv.addEventListener('click', () => {
-          console.log('Project Remove:', projectSelected);
-          removeProject(projectSelected);
-          main();
+            //store selected and also highlight it
+            const sidebarListAll = projectListUl.getElementsByClassName('projectItem');
+            Array.from(sidebarListAll).forEach(item => {
+                item.classList.remove('selected')
+            })
+            projectItem.classList.add('selected');
+            console.log('Project selected:', projectSelected);
+            main()
         })
-        
-        deleteButtonDiv.appendChild(deleteButtonSvg); 
-          
-    });
+
+      projectListUl.appendChild(projectItem);
+  });
+
+  //add delete button for projects
+  const deleteButtonDiv = document.createElement('div');
+  deleteButtonDiv.classList.add('deleteButtonDiv')
+  deleteButtonDiv.textContent = 'Delete Selected'
+  projectListUl.appendChild(deleteButtonDiv); 
+
+  //add delete click for delete button
+  deleteButtonDiv.addEventListener('click', () => {
+    console.log('Project Remove:', projectSelected);
+    removeProject(projectSelected);
+    sidebar()
+    main();
+  })
+
+  //add delete button for projects
+  const addButtonDiv = document.createElement('div');
+  addButtonDiv.classList.add('addButtonDiv')
+  addButtonDiv.textContent = 'Add New Project'
+  projectListUl.appendChild(addButtonDiv); 
+
+  //add delete click for delete button
+  addButtonDiv.addEventListener('click', () => {
+    const newProject = prompt("Please enter a new project name:", "Awesome winner project1");
+    console.log('Project Add:', newProject);
+    addProject(newProject)
+    sidebar()
+    main();
+  })
+
+
 
 }
 
