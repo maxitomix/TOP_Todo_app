@@ -23,13 +23,25 @@ let projectList = [
       todos: [
         { text: 'Ut enim ad minim veniam.', recordDate: '2023-05-20', dueDate: '2023-05-29' },
         { text: 'Ut enim ad minim veniam.', recordDate: '2023-05-20', dueDate: '2023-05-30' }
-      ]
+      ],
+      doing: [
+        { text: 'Lorem ipsum dolor sit amet.', recordDate: '2023-05-20', dueDate: '2023-05-26' },
+      ],
+      done: [
+        { text: 'Lorem ipsum dolor sit amet.', recordDate: '2023-05-20', dueDate: '2023-05-26' },
+      ],
     },
     {
       name: 'Project3',
       todos: [
         { text: '19 packages are looking for funding.', recordDate: '2023-05-20', dueDate: '2023-06-01' }
-      ]
+      ],
+      doing: [
+        { text: 'Lorem ipsum dolor sit amet.', recordDate: '2023-05-20', dueDate: '2023-05-26' },
+        { text: 'Ut enim ad minim veniam.', recordDate: '2023-05-20', dueDate: '2023-05-27' },
+      ],
+      done: [
+      ],
     }
 ];
 
@@ -99,8 +111,6 @@ function sidebar(){
             main()
           
         })
-
-
         projectListUl.appendChild(projectLi);
     });
 
@@ -116,20 +126,51 @@ function main(){
     mainDiv.innerHTML = '';
 
     const mainH2 = document.createElement('h2');
-    mainH2.textContent = `Project ${projectList[projectSelected].name} work area:`;
+    mainH2.textContent = ` ${projectList[projectSelected].name} work area:`;
     mainDiv.appendChild(mainH2);
 
+
     // Display todo, doing, and done tasks of the selected project
-    const todoStatus = ['todos', 'doing', 'done'];
+    const todoStatus = [];
+    // Iterate over projectList to extract unique status values
+    projectList.forEach(project => {
+      Object.keys(project).forEach(key => {
+        if (key !== 'name' && !todoStatus.includes(key)) {
+          todoStatus.push(key);
+        }
+      });
+    });
+
     todoStatus.forEach( statuses => {
         const statusContainer = document.createElement('div');
+        statusContainer.classList.add('statusContainer')
         mainDiv.appendChild(statusContainer);
-        const statusTitle = document.createElement('h3');
+
+        const statusTitle = document.createElement('h2');
         statusTitle.textContent = statuses;
         statusContainer.appendChild(statusTitle);
 
-    })
+        projectList[projectSelected][statuses].forEach(task => {
+          const statusItems = document.createElement('div');
+          statusItems.classList.add('statusItems');
+          statusContainer.appendChild(statusItems);
 
+          const taskDueDate = document.createElement('p');
+          taskDueDate.textContent = `Due Date: ${task.dueDate}`;
+          taskDueDate.classList.add('date');
+          statusItems.appendChild(taskDueDate);
+
+          const taskRecordDate = document.createElement('p');
+          taskRecordDate.textContent = `Record Date: ${task.recordDate}`;
+          taskRecordDate.classList.add('date');
+          statusItems.appendChild(taskRecordDate);
+
+          const taskElement = document.createElement('p');
+          taskElement.textContent = task.text;
+          taskElement.classList.add('taskItem');
+          statusItems.appendChild(taskElement);
+        })
+    })
 }
 
 function display(){

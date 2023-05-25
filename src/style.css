@@ -4,7 +4,8 @@
     --three-color: #9DB2BF;
     --four-color: #DDE6ED;
     --accent-color:#D21312;
-  }
+    --accent2-color:#00E5FF;   
+}
 
 *{
     box-sizing: border-box;
@@ -33,7 +34,8 @@ html{
 }
 
 .svg{
-    filter: invert(16%) sepia(81%) saturate(3883%) hue-rotate(354deg) brightness(92%) contrast(96%);
+    /* filter: invert(16%) sepia(81%) saturate(3883%) hue-rotate(354deg) brightness(92%) contrast(96%); */
+    filter: invert(51%) sepia(36%) saturate(3669%) hue-rotate(160deg) brightness(92%) contrast(106%);
 }
 
 .headerBox {
@@ -96,3 +98,31 @@ html{
     border-radius: 1rem;
 }
 
+.mainBox h2{
+    text-align: center;
+}
+
+.statusContainer h2{
+    text-align: left;
+    margin-top: 1rem;
+}
+
+.mainBox .statusItems{
+    padding: .5rem;
+    margin: .5rem;
+    background-color:  var(--one-color);  
+    box-shadow: 
+    2px 2px 4px rgba(0, 0, 0, 0.2),
+    -2px -2px 4px rgba(0, 0, 0, 0.2);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    
+
+}
+
+.statusItems .taskItem{
+    grid-column: 1/3;
+    border-top: 1px solid var(--accent2-color);
+    padding-top: .5rem;
+    margin-bottom: .5rem;
+}
