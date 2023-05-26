@@ -1,4 +1,5 @@
 import './style.css';
+import { format } from 'date-fns';
 
 
 let projectList = [
@@ -45,7 +46,9 @@ let projectList = [
     }
 ];
 
-let projectSelected = 0; 
+let projectSelected = '0'; 
+let taskSelected = null;
+let statusSelected= null;
 let mainDiv = document.getElementById('content').getElementsByClassName('mainBox')[0];
 let sidebarDiv = document.getElementById('content').getElementsByClassName('sideBox')[0];
 
@@ -105,9 +108,14 @@ function sidebar(){
       // Add data attribute for the project name position
       projectItem.dataset.position = index;
 
+      if (index === projectSelected) {
+        projectItem.classList.add('selected');
+      }
+
       //add a click listener to stored the selected project
         projectItem.addEventListener('click', () => {
             projectSelected = projectItem.dataset.position;
+            taskSelected = null;
 
             //store selected and also highlight it
             const sidebarListAll = projectListUl.getElementsByClassName('projectItem');
@@ -122,11 +130,31 @@ function sidebar(){
       projectListUl.appendChild(projectItem);
   });
 
+  //control button div
+  const controlsSidebarDiv = document.createElement('div');
+  controlsSidebarDiv.classList.add('controlsSidebarDiv');
+  projectListUl.appendChild(controlsSidebarDiv);
+
+  //add add button for projects
+  const addButtonDiv = document.createElement('div');
+  addButtonDiv.classList.add('addButtonDiv')
+  addButtonDiv.textContent = 'Add New Project'
+  controlsSidebarDiv.appendChild(addButtonDiv); 
+
+  //add click for add button
+  addButtonDiv.addEventListener('click', () => {
+    const newProject = prompt("Please enter a new project name:", "Awesome winner project");
+    console.log('Project Add:', newProject);
+    addProject(newProject)
+    main();
+    sidebar()
+  })
+
   //add delete button for projects
   const deleteButtonDiv = document.createElement('div');
   deleteButtonDiv.classList.add('deleteButtonDiv')
   deleteButtonDiv.textContent = 'Delete Selected'
-  projectListUl.appendChild(deleteButtonDiv); 
+  controlsSidebarDiv.appendChild(deleteButtonDiv); 
 
   //add delete click for delete button
   deleteButtonDiv.addEventListener('click', () => {
@@ -135,22 +163,6 @@ function sidebar(){
     sidebar()
     main();
   })
-
-  //add delete button for projects
-  const addButtonDiv = document.createElement('div');
-  addButtonDiv.classList.add('addButtonDiv')
-  addButtonDiv.textContent = 'Add New Project'
-  projectListUl.appendChild(addButtonDiv); 
-
-  //add delete click for delete button
-  addButtonDiv.addEventListener('click', () => {
-    const newProject = prompt("Please enter a new project name:", "Awesome winner project1");
-    console.log('Project Add:', newProject);
-    addProject(newProject)
-    sidebar()
-    main();
-  })
-
 
 
 }
@@ -182,16 +194,19 @@ function main(){
 
     todoStatus.forEach( statuses => {
         const statusContainer = document.createElement('div');
-        statusContainer.classList.add('statusContainer')
+        statusContainer.classList.add('statusContainer');
+        statusContainer.dataset.status = statuses;
+        statusContainer.dataset.project = projectSelected;
         mainDiv.appendChild(statusContainer);
 
         const statusTitle = document.createElement('h2');
         statusTitle.textContent = statuses;
         statusContainer.appendChild(statusTitle);
 
-        projectList[projectSelected][statuses].forEach(task => {
+        projectList[projectSelected][statuses].forEach((task,index) => {
           const statusItems = document.createElement('div');
           statusItems.classList.add('statusItems');
+          statusItems.dataset.position = index;
           statusContainer.appendChild(statusItems);
 
           const taskDueDate = document.createElement('p');
@@ -208,27 +223,86 @@ function main(){
           taskElement.textContent = task.text;
           taskElement.classList.add('taskItem');
           statusItems.appendChild(taskElement);
+
+          if (index.toString() === taskSelected && statuses === statusSelected) {
+            statusItems.classList.add('selected');
+          }
+         
+          //select functionality
+          statusItems.addEventListener('click', () => {
+            taskSelected = statusItems.dataset.position;
+            statusSelected = statusContainer.dataset.status;
+
+            //store selected and also highlight it
+            const statusItemsAll = statusContainer.getElementsByClassName('statusItems');
+            Array.from(statusItemsAll).forEach(item => {
+                item.classList.remove('selected')
+            })
+            statusItems.classList.add('selected');
+            console.log('Status selected:', statusSelected);
+            console.log('Task selected:', taskSelected);
+            main()
+          })
         })
-    })
+
+        //control button div
+        const controlsMainDiv = document.createElement('div');
+        controlsMainDiv.classList.add('controlsMainDiv');
+        statusContainer.appendChild(controlsMainDiv);
+              
+
+
+        //add add button for projects
+        const addButtonDiv = document.createElement('div');
+        addButtonDiv.classList.add('addButtonDiv')
+        addButtonDiv.textContent = 'Add New Task'
+        controlsMainDiv.appendChild(addButtonDiv); 
+
+        //add click for add button
+        addButtonDiv.addEventListener('click', () => {
+          statusSelected = statusContainer.dataset.status;
+          const newTask = prompt("Please enter new task:", "Very important task");
+          console.log('Task Add:', newTask, statusSelected);
+          addTask(projectSelected, statusSelected, newTask)
+          main();
+        })
+
+        //add delete button for status items
+        const deleteButtonDiv = document.createElement('div');
+        deleteButtonDiv.classList.add('deleteButtonDiv')
+        deleteButtonDiv.textContent = 'Delete Selected'
+        controlsMainDiv.appendChild(deleteButtonDiv); 
+
+        //add delete click for delete button
+        deleteButtonDiv.addEventListener('click', () => {
+          console.log(projectSelected, '=',statusContainer.dataset.project, statusSelected, '=',statusContainer.dataset.status , taskSelected, '=!', null );
+          if (projectSelected ===  statusContainer.dataset.project && statusSelected === statusContainer.dataset.status
+            && taskSelected !== null){
+          console.log('Task Remove:', projectSelected, statusSelected, taskSelected);
+          removeTask(projectSelected, statusSelected, taskSelected);
+          main();
+          }
+        })
+      })
 }
 
-function display(){
-    header();
-    sidebar();
-    main();
-}
 
-display()
-console.log(projectList)
+
 
 //------------------------------------------------------------------------------------------------------------------
 //factory creat project
-function createProject(name, todos, doing, done) {
+function createProject(name) {
   return {
     name,
-    todos,
-    doing,
-    done
+    todos: [
+      { text: '', recordDate: '', dueDate: '' },
+    ],
+    doing: [
+      { text: '', recordDate: '', dueDate: '' },
+    ],
+    done: [
+      { text: '', recordDate: '', dueDate: '' },
+    ],
   };
 }
 
@@ -242,3 +316,39 @@ projectList.push(newProject);
 function removeProject(projectListIndex) {
     projectList.splice(projectListIndex, 1);
 }
+
+//function remove a task
+function removeTask(projectListIndex, status, task) {
+  projectList[projectListIndex][status].splice(task, 1);
+  taskSelected = null;
+}
+
+//function add a task 
+function addTask(projectListIndex, status, task) {
+  const today = format(new Date(), 'yyyy-MM-dd');
+  projectList[projectListIndex][status].push({ text: task, recordDate: today, dueDate: '' });
+  taskSelected = null;
+}
+
+//function changeStatus
+function changeStatus(projectSelected, statusSelected, taskSelected, newStatus){
+  const tempObject = projectList[projectSelected][statusSelected][taskSelected];
+  projectList[projectSelected][statusSelected].splice(taskSelected, 1);
+  projectList[projectSelected][newStatus].push(tempObject);
+  projectSelected = '0'; 
+  taskSelected = null;
+  statusSelected= null;
+  main();
+}
+
+//function display
+function display(){
+  header();
+  sidebar();
+  main();
+}
+
+//------------------------------------------------------------------------------------------------------------------
+display()
+console.log(projectList);
+console.log(projectSelected);

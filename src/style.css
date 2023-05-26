@@ -59,12 +59,23 @@ html{
 }
 
 
+
+.controlsSidebarDiv, .controlsMainDiv{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.statusButton{
+    color:#00E5FF;
+    background-color: #526D82;
+}
+
 .sideBox {
     grid-area: sideBox;
     background-color: var(--two-color);
     border-radius: 1rem;
     padding: 1rem;
-
 }
 
 .selected{
@@ -166,3 +177,6 @@ html{
     margin-bottom: .5rem;
 }
 
+.statusItems p:nth-child(2){
+    text-align-last: right;
+}
