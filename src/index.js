@@ -49,6 +49,8 @@ let projectList = [
 let projectSelected = '0'; 
 let taskSelected = null;
 let statusSelected= null;
+let currentHoverTask = null;
+
 let mainDiv = document.getElementById('content').getElementsByClassName('mainBox')[0];
 let sidebarDiv = document.getElementById('content').getElementsByClassName('sideBox')[0];
 
@@ -106,7 +108,7 @@ function sidebar(){
       projectItem.classList.add('projectItem')
       projectItem.textContent = project.name;
       // Add data attribute for the project name position
-      projectItem.dataset.position = index;
+      projectItem.dataset.ProjectPosition = index;
 
       if (index === projectSelected) {
         projectItem.classList.add('selected');
@@ -114,7 +116,7 @@ function sidebar(){
 
       //add a click listener to stored the selected project
         projectItem.addEventListener('click', () => {
-            projectSelected = projectItem.dataset.position;
+            projectSelected = projectItem.dataset.ProjectPosition;
             taskSelected = null;
 
             //store selected and also highlight it
@@ -199,6 +201,19 @@ function main(){
         statusContainer.dataset.project = projectSelected;
         mainDiv.appendChild(statusContainer);
 
+        //make droppable into
+        statusContainer.addEventListener('dragover', (e) => {
+            e.preventDefault(); // this is necessary to allow dropping
+        });
+        
+        statusContainer.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const oldStatus = e.dataTransfer.getData('parent');
+            const taskPosition = e.dataTransfer.getData('text/plain');
+            changeStatus(projectSelected, oldStatus, taskPosition, statuses);
+        });
+        //
+        
         const statusTitle = document.createElement('h2');
         statusTitle.textContent = statuses;
         statusContainer.appendChild(statusTitle);
@@ -206,7 +221,7 @@ function main(){
         projectList[projectSelected][statuses].forEach((task,index) => {
           const statusItems = document.createElement('div');
           statusItems.classList.add('statusItems');
-          statusItems.dataset.position = index;
+          statusItems.dataset.task = index;
           statusContainer.appendChild(statusItems);
 
           const taskDueDate = document.createElement('p');
@@ -230,7 +245,7 @@ function main(){
          
           //select functionality
           statusItems.addEventListener('click', () => {
-            taskSelected = statusItems.dataset.position;
+            taskSelected = statusItems.dataset.task;
             statusSelected = statusContainer.dataset.status;
 
             //store selected and also highlight it
@@ -242,7 +257,29 @@ function main(){
             console.log('Status selected:', statusSelected);
             console.log('Task selected:', taskSelected);
             main()
-          })
+          })      
+          
+          //make dragable
+          statusItems.setAttribute("draggable", "true");
+          statusItems.addEventListener('dragstart', (e) => {
+              e.dataTransfer.setData('text/plain', e.target.dataset.task);
+              e.dataTransfer.setData('parent', statuses);
+          });
+
+          //Listen to dragover
+          statusItems.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            currentHoverTask = statusItems.dataset.task;
+            console.log(currentHoverTask);
+          });
+
+          statusItems.addEventListener('dragleave', (e) => {
+                currentHoverTask = null;
+                console.log(currentHoverTask);
+          });
+          //
+
+
         })
 
         //control button div
@@ -283,6 +320,8 @@ function main(){
           main();
           }
         })
+
+
       })
 }
 
@@ -331,15 +370,28 @@ function addTask(projectListIndex, status, task) {
 }
 
 //function changeStatus
-function changeStatus(projectSelected, statusSelected, taskSelected, newStatus){
-  const tempObject = projectList[projectSelected][statusSelected][taskSelected];
-  projectList[projectSelected][statusSelected].splice(taskSelected, 1);
-  projectList[projectSelected][newStatus].push(tempObject);
-  projectSelected = '0'; 
+// function changeStatus(projectSelected, statusSelected, taskSelected, newStatus){
+//   const tempObject = projectList[projectSelected][statusSelected][taskSelected];
+//   projectList[projectSelected][statusSelected].splice(taskSelected, 1);
+//   projectList[projectSelected][newStatus].push(tempObject);
+//   projectSelected = '0'; 
+//   taskSelected = null;
+//   statusSelected= null;
+//   main();
+function changeStatus(projectSelected, oldStatus, taskSelected, newStatus){
+  const tempObject = projectList[projectSelected][oldStatus][taskSelected];
+  projectList[projectSelected][oldStatus].splice(taskSelected, 1);
+
+  // if (currentHoverTask === null){
+  // projectList[projectSelected][newStatus].push(tempObject);
+  // }
+  projectList[projectSelected][newStatus].splice(currentHoverTask, 0, tempObject);
+
   taskSelected = null;
   statusSelected= null;
   main();
 }
+
 
 //function display
 function display(){
