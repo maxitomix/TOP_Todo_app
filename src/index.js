@@ -283,14 +283,18 @@ function main(){
           //
           //modify due date
           taskDueDate.addEventListener('click', () => {
-            //   if (task.dueDate === '') {
-            //     task.dueDate = new Date();
-            //  }
             const newDueDate = promptForNewDate();
             projectList[projectSelected][statuses][index].dueDate = newDueDate;
             main();
           });
 
+          //modify task text
+          taskElement.addEventListener('click', () => {
+            let oldTaskText = projectList[projectSelected][statuses][index].text;
+            const newTaskText = promptForNewTaskText(oldTaskText);
+            projectList[projectSelected][statuses][index].text = newTaskText;
+            main();
+          });
 
         })
 
@@ -393,8 +397,18 @@ function changeStatus(projectSelected, oldStatus, taskSelected, newStatus){
 
 function promptForNewDate() {
   let newDateString = prompt("Please enter a new due date (yyyy-MM-dd)");
+  if (newDateString === null){newDateString =''}
+  else{
   newDateString = new Date(newDateString);
+  }
   return newDateString
+}
+
+function promptForNewTaskText(oldtTaskText) {
+  let newTaskText = prompt(`${oldtTaskText}`);
+  if (newTaskText === null){newTaskText = oldtTaskText}
+
+  return newTaskText;
 }
 
 
