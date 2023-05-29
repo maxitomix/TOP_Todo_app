@@ -1,5 +1,5 @@
 import './style.css';
-import { isValid, parse, format } from 'date-fns';
+import { format } from 'date-fns';
 
 let projectList = [
   {
@@ -225,15 +225,24 @@ function main(){
           statusContainer.appendChild(statusItems);
 
           const taskDueDate = document.createElement('p');
+          // taskDueDate.textContent = `Due Date: ${task.dueDate}`;
 
-
-          taskDueDate.textContent = `Due Date: ${task.dueDate}`;
-   
+          if (task.dueDate === null || task.dueDate === '' )
+              {taskDueDate.textContent = `Due Date: ${task.dueDate}`;}
+          else{
+          let isoDueDate = task.dueDate;
+          taskDueDate.textContent = `Due Date: ${isoDueDate.toISOString().slice(0,10)}`;
+          // taskDueDate.textContent = `Due Date: ${task.dueDate.toISOString().slice(0,10)}`;
+          // taskDueDate.textContent = `Due Date: ${format(task.dueDate, 'yyyy-MM-ss')}`;
+          }
           taskDueDate.classList.add('DueDate');
           statusItems.appendChild(taskDueDate);
 
           const taskRecordDate = document.createElement('p');
-          taskRecordDate.textContent = `Record Date: ${task.recordDate}`;
+          // taskRecordDate.textContent = `Record Date: ${task.recordDate}`;
+          let isoRecordDate = task.recordDate;
+          taskRecordDate.textContent = `Record Date: ${isoRecordDate.toISOString().slice(0,10)}`;
+          // taskRecordDate.textContent = `Record Date: ${format(task.recordDate, 'yyyy-MM-ss')}`;
           taskRecordDate.classList.add('RecordDate');
           statusItems.appendChild(taskRecordDate);
 
@@ -395,14 +404,37 @@ function changeStatus(projectSelected, oldStatus, taskSelected, newStatus){
 }
 
 
+// function promptForNewDate() {
+//   let newDateString = prompt("Please enter a new due date (yyyy-MM-dd)");
+//   if (newDateString === null){newDateString =''}
+//   else{
+//   newDateString = new Date(newDateString);
+//   }
+//   return newDateString
+// }
+
 function promptForNewDate() {
   let newDateString = prompt("Please enter a new due date (yyyy-MM-dd)");
-  if (newDateString === null){newDateString =''}
+  if (newDateString === null){newDateString =''; return newDateString}
   else{
-  newDateString = new Date(newDateString);
+    let newDate = new Date(newDateString);
+    console.log(newDate);
+    // Create a new date object for the current date and time
+    let currentDate = new Date();
+
+    // Set the time of the newDate to the current time
+    // newDate.setHours(currentDate.getHours(), currentDate.getMinutes());
+    console.log(currentDate);
+    console.log(newDate);
+    let offset = currentDate.getTimezoneOffset();
+    console.log('offset', offset);
+    offset *= 60 * 1000;
+    newDate.setTime(newDate.getTime() + offset);
+    console.log(newDate);
+    return newDate;
   }
-  return newDateString
 }
+
 
 function promptForNewTaskText(oldtTaskText) {
   let newTaskText = prompt(`${oldtTaskText}`);
