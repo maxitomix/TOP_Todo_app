@@ -105,6 +105,7 @@ html{
     display: flex;
     justify-content: space-between;
     align-items: center;
+    color: var(--three-color)
 }
 
 .addButtonDiv{
@@ -117,30 +118,8 @@ html{
     display: flex;
     justify-content: space-between;
     align-items: center;
+    color: var(--three-color)
 }
-
-
-
-/* .projectList div:hover{
-    cursor:pointer;
-    background-color:  var(--two-color);
-    outline: 4px solid var(--one-color);  
-} */
-
-/* .deleteButtonDiv {
-    width: 1rem;
-    margin-left: auto;
-} */
-
-/* .deleteButtonSVG:hover{
-    cursor:pointer;
-    filter: invert(16%) sepia(81%) saturate(3883%) hue-rotate(354deg) brightness(92%) contrast(96%);
-} */
-
-
-
-
-
 
 .mainBox {
     grid-area: mainBox;
@@ -179,4 +158,34 @@ html{
 
 .statusItems p:nth-child(2){
     text-align-last: right;
+}
+
+@media screen and (max-width: 650px) {
+    #content {
+
+        grid-template-areas:
+            "headerBox"
+            "sideBox"
+            "mainBox";
+    }
+
+.mainBox, .sideBox{
+    margin: 0;
+    margin-top: .5rem;
+
+}
+
+.headerBox{
+    margin-bottom: 0;
+    font-size:1rem;
+}
+
+#logo, #login{
+    width: 2rem; 
+}
+
+.headerBox h1{
+    margin: .5rem;
+}
+
 }

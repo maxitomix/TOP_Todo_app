@@ -1,5 +1,5 @@
 import './style.css';
-import { format } from 'date-fns';
+import { isValid, parse, format } from 'date-fns';
 
 
 let projectList = [
@@ -139,23 +139,23 @@ function sidebar(){
 
   //add add button for projects
   const addButtonDiv = document.createElement('div');
-  addButtonDiv.classList.add('addButtonDiv')
-  addButtonDiv.textContent = 'Add New Project'
+  addButtonDiv.classList.add('addButtonDiv');
+  addButtonDiv.textContent = 'Add Project';
   controlsSidebarDiv.appendChild(addButtonDiv); 
 
   //add click for add button
   addButtonDiv.addEventListener('click', () => {
     const newProject = prompt("Please enter a new project name:", "Awesome winner project");
     console.log('Project Add:', newProject);
-    addProject(newProject)
+    addProject(newProject);
     main();
     sidebar()
   })
 
   //add delete button for projects
   const deleteButtonDiv = document.createElement('div');
-  deleteButtonDiv.classList.add('deleteButtonDiv')
-  deleteButtonDiv.textContent = 'Delete Selected'
+  deleteButtonDiv.classList.add('deleteButtonDiv');
+  deleteButtonDiv.textContent = 'Delete';
   controlsSidebarDiv.appendChild(deleteButtonDiv); 
 
   //add delete click for delete button
@@ -179,7 +179,7 @@ function main(){
     mainDiv.innerHTML = '';
 
     const mainH2 = document.createElement('h2');
-    mainH2.textContent = ` ${projectList[projectSelected].name} work area:`;
+    mainH2.textContent = ` ${projectList[projectSelected].name} tasks:`;
     mainDiv.appendChild(mainH2);
 
 
@@ -225,13 +225,20 @@ function main(){
           statusContainer.appendChild(statusItems);
 
           const taskDueDate = document.createElement('p');
-          taskDueDate.textContent = `Due Date: ${task.dueDate}`;
-          taskDueDate.classList.add('date');
+
+          if (task.dueDate ===''){ 
+            taskDueDate.textContent = `Due Date: ${task.dueDate}`;
+            }else{
+            const formattedDueDate = format(new Date(task.dueDate), 'yyyy-MM-dd');
+            taskDueDate.textContent = `Due Date: ${formattedDueDate}`;
+            }
+
+          taskDueDate.classList.add('DueDate');
           statusItems.appendChild(taskDueDate);
 
           const taskRecordDate = document.createElement('p');
           taskRecordDate.textContent = `Record Date: ${task.recordDate}`;
-          taskRecordDate.classList.add('date');
+          taskRecordDate.classList.add('RecordDate');
           statusItems.appendChild(taskRecordDate);
 
           const taskElement = document.createElement('p');
@@ -278,6 +285,15 @@ function main(){
                 console.log(currentHoverTask);
           });
           //
+          //modify due date
+          taskDueDate.addEventListener('click', () => {
+              if (task.dueDate === '') {
+                task.dueDate = new Date();
+             }
+            const newDueDate = promptForNewDate(new Date(task.dueDate));
+            projectList[projectSelected][statuses][index].dueDate = newDueDate;
+            main();
+          });
 
 
         })
@@ -292,7 +308,7 @@ function main(){
         //add add button for projects
         const addButtonDiv = document.createElement('div');
         addButtonDiv.classList.add('addButtonDiv')
-        addButtonDiv.textContent = 'Add New Task'
+        addButtonDiv.textContent = 'Add Task'
         controlsMainDiv.appendChild(addButtonDiv); 
 
         //add click for add button
@@ -307,7 +323,7 @@ function main(){
         //add delete button for status items
         const deleteButtonDiv = document.createElement('div');
         deleteButtonDiv.classList.add('deleteButtonDiv')
-        deleteButtonDiv.textContent = 'Delete Selected'
+        deleteButtonDiv.textContent = 'Delete'
         controlsMainDiv.appendChild(deleteButtonDiv); 
 
         //add delete click for delete button
@@ -370,26 +386,40 @@ function addTask(projectListIndex, status, task) {
 }
 
 //function changeStatus
-// function changeStatus(projectSelected, statusSelected, taskSelected, newStatus){
-//   const tempObject = projectList[projectSelected][statusSelected][taskSelected];
-//   projectList[projectSelected][statusSelected].splice(taskSelected, 1);
-//   projectList[projectSelected][newStatus].push(tempObject);
-//   projectSelected = '0'; 
-//   taskSelected = null;
-//   statusSelected= null;
-//   main();
+
 function changeStatus(projectSelected, oldStatus, taskSelected, newStatus){
   const tempObject = projectList[projectSelected][oldStatus][taskSelected];
   projectList[projectSelected][oldStatus].splice(taskSelected, 1);
 
-  // if (currentHoverTask === null){
-  // projectList[projectSelected][newStatus].push(tempObject);
-  // }
   projectList[projectSelected][newStatus].splice(currentHoverTask, 0, tempObject);
 
   taskSelected = null;
   statusSelected= null;
   main();
+}
+
+//function Prompt New due date
+function promptForNewDate(currentDate) {
+  // If currentDate is not provided or is an empty string, use the current date
+  if (!currentDate || currentDate === '') {
+    currentDate = new Date();
+  } else if (typeof currentDate === 'string') {
+    // If currentDate is a string, parse it to a Date object
+    currentDate = parse(currentDate, 'yyyy-MM-dd', new Date());
+  }
+  
+  const formattedCurrentDate = format(currentDate, 'yyyy-MM-dd');
+  const newDateString = prompt("Please enter a new due date (yyyy-MM-dd):", formattedCurrentDate);
+
+  if (newDateString) {
+    const parsedDate = parse(newDateString, 'yyyy-MM-dd', new Date());
+    if (isValid(parsedDate)) {
+      return format(parsedDate, 'yyyy-MM-dd'); 
+    }
+  }
+
+  alert("Invalid date format, please try again.");
+  return formattedCurrentDate; // And here, we're formatting the current date before returning it
 }
 
 
