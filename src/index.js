@@ -64,14 +64,23 @@ function header(){
   
     const logoObj = document.createElement('object');
     logoObj.classList.add('svg');
-    logoObj.id = 'login';
+    logoObj.id = 'logo';
     logoObj.type = 'image/svg+xml';
     logoObj.data = '/src/logo.svg';
     headerDiv.appendChild(logoObj);  
     
+    const titleDiv = document.createElement('div');
+    titleDiv.classList="titleDiv";
+    headerDiv.appendChild(titleDiv);
+
     const headH1 = document.createElement('h1');
-    headH1.textContent = 'ToDoneIng';
-    headerDiv.appendChild(headH1);
+    headH1.textContent = 'ToDominator 3000';
+    titleDiv.appendChild(headH1);
+
+    const headp = document.createElement('p');
+    headp.textContent = 'No task shall be left un-checked';
+    headp.classList="headP";
+    titleDiv.appendChild(headp);
 
     const loginObj = document.createElement('object');
     loginObj.classList.add('svg');

@@ -27,10 +27,16 @@ html{
 
 #logo{
     width: 4rem; 
+    margin-left: 1rem;
+}
+
+#login .svg{
+    transform: rotate(45deg) !important;
 }
 
 #login{
     width: 4rem;
+    margin-right: 1rem;
 }
 
 .svg{
@@ -48,17 +54,51 @@ html{
 
 .headerBox{
     display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .headerBox h1{
-    padding-left: 1rem;
+    /* padding-left: 1rem; */
+    margin-bottom: 0;
+    margin-top: 0;
+    color: #ccf5f4;
+    font-size: 2em;
+    text-align: center;
+    text-shadow: 
+        0 0 5px #00ffff,
+        0 0 10px #00ffff,
+        0 0 15px #00ffff,
+        0 0 20px #00ffff;
+    
 }
 
 .headerBox object:last-child{
     margin-left: auto;
 }
 
+.headerBox .headP{
+    z-index: -10;
+    color: #fff;
+    text-shadow: 
+      0 0 5px #ff00ff, 
+      0 0 10px #ff00ff, 
+      0 0 15px #ff00ff, 
+      0 0 20px #ff00ff,
+      0 0 30px #ff00ff,
+      0 0 40px #ff00ff;
+}
 
+.titleDiv{
+    text-align: center;
+    justify-content: center;
+    /* margin-left: 2rem; */
+    margin-bottom: .5rem;
+    margin-top: .5rem;
+    margin-left: auto;
+    margin-right: auto;
+   
+}
 
 .controlsSidebarDiv, .controlsMainDiv{
     display: flex;
@@ -185,7 +225,8 @@ html{
 }
 
 .headerBox h1{
-    margin: .5rem;
+    font-size: 1.5rem ;
+    margin-bottom: 0;
 }
 
 }
