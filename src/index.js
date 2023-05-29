@@ -1,50 +1,50 @@
 import './style.css';
 import { isValid, parse, format } from 'date-fns';
 
-
 let projectList = [
-    {
-      name: 'Project1',
-      todos: [
-        { text: 'Lorem ipsum dolor sit amet.', recordDate: '2023-05-20', dueDate: '2023-05-26' },
-        { text: 'Ut enim ad minim veniam.', recordDate: '2023-05-20', dueDate: '2023-05-27' },
-        { text: '19 packages are looking for funding.', recordDate: '2023-05-20', dueDate: '2023-05-28' }
-      ],
-      doing: [
-        { text: 'Lorem ipsum dolor sit amet.', recordDate: '2023-05-20', dueDate: '2023-05-26' },
-        { text: 'Ut enim ad minim veniam.', recordDate: '2023-05-20', dueDate: '2023-05-27' },
-      ],
-      done: [
-        { text: 'Lorem ipsum dolor sit amet.', recordDate: '2023-05-20', dueDate: '2023-05-26' },
-        { text: 'Ut enim ad minim veniam.', recordDate: '2023-05-20', dueDate: '2023-05-27' },
-      ],
-    },
-    {
-      name: 'Project2',
-      todos: [
-        { text: 'Ut enim ad minim veniam.', recordDate: '2023-05-20', dueDate: '2023-05-29' },
-        { text: 'Ut enim ad minim veniam.', recordDate: '2023-05-20', dueDate: '2023-05-30' }
-      ],
-      doing: [
-        { text: 'Lorem ipsum dolor sit amet.', recordDate: '2023-05-20', dueDate: '2023-05-26' },
-      ],
-      done: [
-        { text: 'Lorem ipsum dolor sit amet.', recordDate: '2023-05-20', dueDate: '2023-05-26' },
-      ],
-    },
-    {
-      name: 'Project3',
-      todos: [
-        { text: '19 packages are looking for funding.', recordDate: '2023-05-20', dueDate: '2023-06-01' }
-      ],
-      doing: [
-        { text: 'Lorem ipsum dolor sit amet.', recordDate: '2023-05-20', dueDate: '2023-05-26' },
-        { text: 'Ut enim ad minim veniam.', recordDate: '2023-05-20', dueDate: '2023-05-27' },
-      ],
-      done: [
-      ],
-    }
+  {
+    name: 'Project1',
+    todos: [
+      { text: 'Lorem ipsum dolor sit amet.', recordDate: new Date('2023-05-20'), dueDate: new Date('2023-05-26') },
+      { text: 'Ut enim ad minim veniam.', recordDate: new Date('2023-05-20'), dueDate: new Date('2023-05-27') },
+      { text: '19 packages are looking for funding.', recordDate: new Date('2023-05-20'), dueDate: new Date('2023-05-28') }
+    ],
+    doing: [
+      { text: 'Lorem ipsum dolor sit amet.', recordDate: new Date('2023-05-20'), dueDate: new Date('2023-05-26') },
+      { text: 'Ut enim ad minim veniam.', recordDate: new Date('2023-05-20'), dueDate: new Date('2023-05-27') },
+    ],
+    done: [
+      { text: 'Lorem ipsum dolor sit amet.', recordDate: new Date('2023-05-20'), dueDate: new Date('2023-05-26') },
+      { text: 'Ut enim ad minim veniam.', recordDate: new Date('2023-05-20'), dueDate: new Date('2023-05-27') },
+    ],
+  },
+  {
+    name: 'Project2',
+    todos: [
+      { text: 'Ut enim ad minim veniam.', recordDate: new Date('2023-05-20'), dueDate: new Date('2023-05-29') },
+      { text: 'Ut enim ad minim veniam.', recordDate: new Date('2023-05-20'), dueDate: new Date('2023-05-30') }
+    ],
+    doing: [
+      { text: 'Lorem ipsum dolor sit amet.', recordDate: new Date('2023-05-20'), dueDate: new Date('2023-05-26') },
+    ],
+    done: [
+      { text: 'Lorem ipsum dolor sit amet.', recordDate: new Date('2023-05-20'), dueDate: new Date('2023-05-26') },
+    ],
+  },
+  {
+    name: 'Project3',
+    todos: [
+      { text: '19 packages are looking for funding.', recordDate: new Date('2023-05-20'), dueDate: new Date('2023-06-01') }
+    ],
+    doing: [
+      { text: 'Lorem ipsum dolor sit amet.', recordDate: new Date('2023-05-20'), dueDate: new Date('2023-05-26') },
+      { text: 'Ut enim ad minim veniam.', recordDate: new Date('2023-05-20'), dueDate: new Date('2023-05-27') },
+    ],
+    done: [
+    ],
+  }
 ];
+
 
 let projectSelected = '0'; 
 let taskSelected = null;
@@ -226,13 +226,9 @@ function main(){
 
           const taskDueDate = document.createElement('p');
 
-          if (task.dueDate ===''){ 
-            taskDueDate.textContent = `Due Date: ${task.dueDate}`;
-            }else{
-            const formattedDueDate = format(new Date(task.dueDate), 'yyyy-MM-dd');
-            taskDueDate.textContent = `Due Date: ${formattedDueDate}`;
-            }
 
+          taskDueDate.textContent = `Due Date: ${task.dueDate}`;
+   
           taskDueDate.classList.add('DueDate');
           statusItems.appendChild(taskDueDate);
 
@@ -287,10 +283,10 @@ function main(){
           //
           //modify due date
           taskDueDate.addEventListener('click', () => {
-              if (task.dueDate === '') {
-                task.dueDate = new Date();
-             }
-            const newDueDate = promptForNewDate(new Date(task.dueDate));
+            //   if (task.dueDate === '') {
+            //     task.dueDate = new Date();
+            //  }
+            const newDueDate = promptForNewDate();
             projectList[projectSelected][statuses][index].dueDate = newDueDate;
             main();
           });
@@ -345,21 +341,16 @@ function main(){
 
 
 //------------------------------------------------------------------------------------------------------------------
-//factory creat project
+
 function createProject(name) {
   return {
     name,
-    todos: [
-      { text: '', recordDate: '', dueDate: '' },
-    ],
-    doing: [
-      { text: '', recordDate: '', dueDate: '' },
-    ],
-    done: [
-      { text: '', recordDate: '', dueDate: '' },
-    ],
+    todos: [],
+    doing: [],
+    done: [],
   };
 }
+
 
 // Function to add a new project to the projectList
 function addProject(name, todos) {
@@ -380,7 +371,8 @@ function removeTask(projectListIndex, status, task) {
 
 //function add a task 
 function addTask(projectListIndex, status, task) {
-  const today = format(new Date(), 'yyyy-MM-dd');
+  // const today = format(new Date(), 'yyyy-MM-dd');
+  const today = new Date();
   projectList[projectListIndex][status].push({ text: task, recordDate: today, dueDate: '' });
   taskSelected = null;
 }
@@ -398,28 +390,11 @@ function changeStatus(projectSelected, oldStatus, taskSelected, newStatus){
   main();
 }
 
-//function Prompt New due date
-function promptForNewDate(currentDate) {
-  // If currentDate is not provided or is an empty string, use the current date
-  if (!currentDate || currentDate === '') {
-    currentDate = new Date();
-  } else if (typeof currentDate === 'string') {
-    // If currentDate is a string, parse it to a Date object
-    currentDate = parse(currentDate, 'yyyy-MM-dd', new Date());
-  }
-  
-  const formattedCurrentDate = format(currentDate, 'yyyy-MM-dd');
-  const newDateString = prompt("Please enter a new due date (yyyy-MM-dd):", formattedCurrentDate);
 
-  if (newDateString) {
-    const parsedDate = parse(newDateString, 'yyyy-MM-dd', new Date());
-    if (isValid(parsedDate)) {
-      return format(parsedDate, 'yyyy-MM-dd'); 
-    }
-  }
-
-  alert("Invalid date format, please try again.");
-  return formattedCurrentDate; // And here, we're formatting the current date before returning it
+function promptForNewDate() {
+  let newDateString = prompt("Please enter a new due date (yyyy-MM-dd)");
+  newDateString = new Date(newDateString);
+  return newDateString
 }
 
 
